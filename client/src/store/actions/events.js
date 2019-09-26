@@ -70,16 +70,16 @@ export const getRSOEvents = ( idUser, university_id ) => (dispatch, getState) =>
 
 };
 
-export const createEvent = (event) => (dispatch, getState) =>
+export const createEvent = ({ name, eventName, category, description, time, date, location, phone, email, status, Events_university_id, Events_RSO_id, Events_admin_id, approved }) => (dispatch, getState) =>
 {
-    const {name, eventName, category, description, time, date, location, phone, email, status, approved} = event;
 
-    const event2 = {name, category, description, time, date, location, phone, email, status, approved};
+    const body = JSON.stringify({name, category, description, time, date, location, phone, email, status, Events_university_id, Events_RSO_id, Events_admin_id, approved});
 
-    axios.post('/api/events/create', event2, tokenConfig(getState))
+    
+    axios.post('/api/events/create', body, tokenConfig(getState))
         .then(res => {
 
-            if (approved === 1)
+            if ({Events_RSO_id} !== 0)
             {
                 const idEvent = res.data.insertId;
                 const rating = 0;
@@ -90,11 +90,6 @@ export const createEvent = (event) => (dispatch, getState) =>
                     payload: event
                 })
             }
-
-            // TODO: Send events that need approval to the super admin
-            // This can be done by repeating the above code but without the createevent dispatch
-            // Then superadmin can just query which events need approval
-
         })
         .catch(err => {
             dispatch(returnErrors(err.response.data, err.response.status, ' Error creating event'));

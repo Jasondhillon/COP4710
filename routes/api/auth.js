@@ -49,7 +49,6 @@ router.post('/createUser', (req, res) =>
         db.query(sql, userName, (err, result) => {
             if (err)
             { 
-                console.log(err);
                 return res.send(err);
             }
 
@@ -104,7 +103,6 @@ router.post('/login', (req, res) =>
     db.query(sql, userName, (err, result) => {
         if (err)
         { 
-            console.log(err);
             return res.send(err);
         }
 

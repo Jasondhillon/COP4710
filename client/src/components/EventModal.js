@@ -23,7 +23,7 @@ class EventModal extends Component
         university: '',
         rso: 0,
         admin_id: '',
-        approved: 0
+        approved: ''
     }
 
     componentDidMount()
@@ -31,21 +31,14 @@ class EventModal extends Component
         this.props.getRSOsAdmin(this.props.auth.user.id);
     }
 
-    componentDidUpdate(prevProps)
-    {
-        if (prevProps.rsos.length === 1)
-        {
-            this.setState({
-                rso: this.props.rsos[0].idRSO
-            });
-        }
-    }
-
     toggle = () => 
     {
         this.setState({
             modal: !this.state.modal,
+            rso: this.props.rsos[0].idRSO,
+            eventName: this.props.rsos[0].name
         });
+
     }
 
     onChange = (e) => {
@@ -71,9 +64,12 @@ class EventModal extends Component
         e.preventDefault();
 
         const { id, university_id } = this.props.auth.user;
-        if (this.state.rso !== "0")
+
+        let app = 0;
+
+        if (this.state.rso !== 0)
         {
-            this.setState({approved: 1});
+            app = 1;
         }
 
         const event = {
@@ -90,7 +86,7 @@ class EventModal extends Component
             Events_university_id: university_id,
             Events_RSO_id: this.state.rso,
             Events_admin_id: id,
-            approved: this.state.approved
+            approved: app
         }
         this.props.createEvent(event);
 
@@ -110,7 +106,7 @@ class EventModal extends Component
             email: '',
             status: '',
             university: '',
-            rso: 0,
+            rso: this.props.rsos[0].idRSO,
             admin_id: '',
             approved: 0
         });
