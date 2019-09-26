@@ -1,0 +1,64 @@
+.App {
+  text-align: center;
+}
+
+/* .App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+
+.App-title {
+  font-size: 1.5em;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}  */
+
+.videoparallax{
+  filter:sepia(100%);
+  position: fixed;
+  object-fit: fill;
+  bottom: 0;
+  right: 0;
+  height: auto;
+  width: auto;
+  min-height: 100%;
+  min-width: 100%;
+  z-index: -9999;
+}
+
+.remove-btn {
+  margin-right: 0.5rem;
+}
+
+.fade-enter {
+  opacity: 0.01;
+}
+
+.fade-enter-active {
+  opacity: 1.0;
+  transition: opacity 1000ms ease-in;
+}
+
+.fade-exit {
+  opacity: 1.0;
+}
+
+.fade-exit-active {
+  opacity: 0.1;
+  transition: opacity 1000ms ease-out;
+}
