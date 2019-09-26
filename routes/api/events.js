@@ -85,4 +85,21 @@ router.post('/create', (req,res) => {
     });
 });
 
+// @router POST to api/events/approval
+// @desc   Loads events that need admin approval
+// @access Private
+router.post('/approval', auth, (req, res) => {
+    const { university_id } = req.body;
+
+    let sql = 'SELECT * FROM events WHERE approval = 0 AND Events_university_id = ?';
+    db.query(sql, university_id, (err, result) => {
+        if (err) {
+            return res.status(400).send(err);
+        }
+
+        res.json(result);
+
+    });
+});
+
 module.exports = router;

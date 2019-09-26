@@ -1,8 +1,9 @@
-import { GET_PUBLIC_EVENTS, GET_PRIVATE_EVENTS, GET_RSO_EVENTS, CREATE_EVENT, CLEAR_EVENTS } from '../actions/constants';
+import { GET_PUBLIC_EVENTS, GET_PRIVATE_EVENTS, GET_RSO_EVENTS, GET_EVENTS_APPROVAL, CREATE_EVENT, CLEAR_EVENTS } from '../actions/constants';
 
 const initalState = 
 {
-    events: []
+    events: [],
+    eventsApproval: [],
 }
 
 export default function(state = initalState, action)
@@ -23,6 +24,11 @@ export default function(state = initalState, action)
             return {
                 ...state,
                 events: [action.payload, ...state.events]
+            }
+        case GET_EVENTS_APPROVAL:
+            return {
+                ...state,
+                eventsApproval: action.payload
             }
         default:
             return state;

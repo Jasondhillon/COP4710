@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { returnErrors  } from "./errorActions";
-import { GET_PUBLIC_EVENTS, GET_PRIVATE_EVENTS, GET_RSO_EVENTS, CREATE_EVENT, CLEAR_EVENTS } from './constants';
+import { GET_PUBLIC_EVENTS, GET_PRIVATE_EVENTS, GET_RSO_EVENTS, CREATE_EVENT, CLEAR_EVENTS, GET_EVENTS_APPROVAL } from './constants';
 
 
 export const getPublicEvents = ( university_id ) => dispatch =>
@@ -95,6 +95,28 @@ export const createEvent = ({ name, eventName, category, description, time, date
             dispatch(returnErrors(err.response.data, err.response.status, ' Error creating event'));
         });
 }
+
+export const getEventsApproval = (university_id) => dispatch => {
+    const config =
+    {
+        headers:
+        {
+            'Content-Type': 'application/json'
+        }
+    }
+
+    const body = JSON.stringify({ university_id });
+
+    axios.post('/api/events/approval', body, config)
+        .then(res => dispatch({
+            type: GET_EVENTS_APPROVAL,
+            payload: res.data
+        }))
+        .catch(err => {
+            dispatch(returnErrors(err.response.data, err.response.status, ' GET_EVENTS_APPROVAL_FAIL'));
+        });
+
+};
 
 export const tokenConfig = getState => {
 
