@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import { Container, ListGroup, ListGroupItem} from 'reactstrap';
+import { Accordion, Card } from 'react-bootstrap';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { connect } from 'react-redux';
-import { clearEvents} from '../store/actions/events'
+import { clearEvents, getRSOEvents, updateRating} from '../store/actions/events'
+import Comments from './Comments';
 import PropTypes from 'prop-types';
+import StarRatings from 'react-star-ratings';
 
 class Events extends Component
 {
@@ -17,29 +19,43 @@ class Events extends Component
         };
     }
 
+    //, idEvent, rating, numRatings, scoreRatings 
+    changeRating = (newRating, name) => {
+        let value = (name[3] + newRating)/(name[2] + 1);
+        this.props.updateRating(name[0], value, name[2]+1, name[3] + newRating );
+        this.props.getRSOEvents(this.props.auth.user.idUser, this.props.auth.user.university_id);
+    }
+
     render() {
 
-
         return(
-            <Container>
-                <ListGroup style={{opacity: .85}}>
-                    <TransitionGroup className="events-list">
-                        {this.props.events.map(({ idEvent, eventName,
-                         name, time, date }) => (
-                            <CSSTransition key={idEvent} timeout={700} classNames="fade">
-                                <ListGroupItem>
-                                    {name + " | "}
-                                    {eventName}
-                                    {" | "}
-                                    {time}
-                                    {" | "}
-                                    {date}
-                                </ListGroupItem>
-                            </CSSTransition>
-                        ))}
-                    </TransitionGroup>
-                </ListGroup>
-            </Container>
+            <Accordion style={{display: 'flex', justifyContent: 'center'}}>
+                <TransitionGroup className="events-list" style={{opacity: .85}}>
+                {this.props.events.map(({ idEvent, eventName, category, description,
+                    name, time, date, location, phone, email, rating, numRatings, scoreRatings }) => (
+                    <CSSTransition key={idEvent} timeout={1000} classNames="fade">
+                        <Card>
+                            <Accordion.Toggle style={{paddingLeft:'4rem' , paddingRight:'4rem'}} as={Card.Header} eventKey={idEvent}>
+                                {name}{" | "}{eventName}{" | "}{time}{" | "}{date}
+                            </Accordion.Toggle>
+                                
+                            <Accordion.Collapse eventKey={idEvent}>
+                                <Card.Body>
+                                    <Card.Title>{eventName}</Card.Title>
+                                    <Card.Subtitle>{description}</Card.Subtitle>
+                                    <Card.Subtitle>{category}</Card.Subtitle>
+                                    <Card.Subtitle>{location}</Card.Subtitle>
+                                    <Card.Subtitle>{phone}</Card.Subtitle>
+                                    <Card.Subtitle>{email}</Card.Subtitle>
+                                    <StarRatings name={[idEvent, rating, numRatings, scoreRatings]} rating={rating} changeRating={this.changeRating}/>
+                                    <Comments eventId={idEvent}/>
+                                </Card.Body>
+                            </Accordion.Collapse>
+                        </Card>
+                    </CSSTransition>
+                ))}
+                </TransitionGroup>
+            </Accordion>
         );
     }
 }
@@ -58,4 +74,4 @@ const mapStateToProps = state => ({
 });
 
 // first param = mapping, 2nd = actions, 3rd = component we are connecting to state
-export default connect(mapStateToProps, {clearEvents})(Events);
+export default connect(mapStateToProps, {clearEvents, updateRating, getRSOEvents})(Events);

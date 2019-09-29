@@ -6,6 +6,7 @@ import Logout from './Logout';
 import LoginModal from './LoginModal';
 import { connect } from 'react-redux';
 import { getRSOEvents } from '../store/actions/events';
+import { getComments } from '../store/actions/info';
 import PropTypes from 'prop-types';
 
 class AppNavbar extends Component 
@@ -18,7 +19,13 @@ class AppNavbar extends Component
     static propTypes = 
     {
         auth: PropTypes.object.isRequired,
-        getRSOEvents: PropTypes.func.isRequired
+        getRSOEvents: PropTypes.func.isRequired,
+        getComments: PropTypes.func.isRequired
+    }
+
+    componentDidMount ()
+    {
+        this.props.getComments();
     }
 
     toggle = () =>
@@ -79,4 +86,4 @@ const mapStateToProps = state => ({
     auth: state.auth
 });
 
-export default connect(mapStateToProps, {getRSOEvents})(AppNavbar);
+export default connect(mapStateToProps, { getRSOEvents, getComments })(AppNavbar);

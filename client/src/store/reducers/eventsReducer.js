@@ -14,6 +14,7 @@ export default function(state = initalState, action)
         case GET_PRIVATE_EVENTS:
         case GET_RSO_EVENTS:
             return {
+                ...state,
                 events: action.payload
             }
         case CLEAR_EVENTS:

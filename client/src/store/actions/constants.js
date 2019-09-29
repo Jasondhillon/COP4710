@@ -10,7 +10,12 @@ export const REGISTER_FAIL = "REGISTER_FAIL";
 export const GET_ERRORS = "GET_ERRORS";
 export const CLEAR_ERRORS = "CLEAR_ERRORS";
 
+export const CREATE_COMMENT = "CREATE_COMMENT";
+export const EDIT_COMMENT = "EDIT_COMMENT";
+export const DELETE_COMMENT = "DELETE_COMMENT";
+
 export const GET_UNIVERSITIES = "GET_UNIVERSITIES";
+export const GET_COMMENTS = "GET_COMMENTS";
 export const GET_RSOS = "GET_RSOS";
 export const GET_RSOS_ADMIN = "GET_RSOS_ADMIN";
 export const GET_PUBLIC_EVENTS = "GET_PUBLIC_EVENTS";

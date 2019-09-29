@@ -16,9 +16,24 @@ const db = mySql.createPool({
 // @router GET api/info/
 // @desc   Get all universities 
 // @access Public
-router.get('/', (req, res) => 
+router.get('/universities', (req, res) => 
 {
     let sql = 'SELECT * FROM universities';
+    db.query(sql, (err, result) => {
+        if (err)
+        {
+            return res.status(400).send(err);
+        }
+        res.json(result);    
+    });
+});
+
+// @router GET api/info/
+// @desc   Get all comments 
+// @access Public
+router.get('/comments', (req, res) => 
+{
+    let sql = 'SELECT Comments.idComment, Comments_event_id, comments.Comments_user_id, comments.message, users.username FROM comments INNER JOIN users ON comments.Comments_user_id = users.idUser';
     db.query(sql, (err, result) => {
         if (err)
         {

@@ -1,4 +1,4 @@
-import { GET_UNIVERSITIES, GET_RSOS, GET_RSOS_ADMIN, CLEAR_RSOS, CLEAR_RSOS_ADMIN } from '../actions/constants';
+import { GET_UNIVERSITIES, GET_COMMENTS, GET_RSOS, GET_RSOS_ADMIN, CLEAR_RSOS, CLEAR_RSOS_ADMIN, CREATE_COMMENT, DELETE_COMMENT, EDIT_COMMENT } from '../actions/constants';
 
 const initalState = 
 {
@@ -12,7 +12,9 @@ const initalState =
     rsosAdmin: [{
         name: "Public Event",
         idRSO: 0
-    }]
+    }],
+
+    comments: []
 }
 
 export default function(state = initalState, action)
@@ -23,6 +25,26 @@ export default function(state = initalState, action)
             return {
                 ...state,
                 universities: action.payload
+            }
+        case GET_COMMENTS:
+            return {
+                ...state,
+                comments : action.payload
+            }
+        case CREATE_COMMENT:
+            return {
+                ...state,
+                comments : [action.payload, ...state.comments]
+            }
+        case EDIT_COMMENT:
+            return {
+                ...state,
+               comments : []
+            }
+        case DELETE_COMMENT:
+            return {
+                ...state,
+                comments : state.comments.filter(comment => comment.idComment !== action.payload)
             }
         case GET_RSOS:
             return {

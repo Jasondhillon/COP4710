@@ -10,6 +10,8 @@ const events = require('./routes/api/events');
 app.use('/api/events', events);
 const rso = require('./routes/api/rso');
 app.use('/api/rso', rso);
+const comments = require('./routes/api/comments');
+app.use('/api/comments', comments);
 
 const path = require('path');
 // Serve static assess while in production

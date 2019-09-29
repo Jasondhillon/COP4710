@@ -59,6 +59,10 @@
 }
 
 .fade-exit-active {
-  opacity: 0.1;
+  opacity: 0.0;
   transition: opacity 1000ms ease-out;
+}
+
+.card-subtitle {
+  margin-bottom: 1rem 
 }

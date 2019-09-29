@@ -19,8 +19,26 @@ const db = mySql.createPool({
 router.post('/public', (req,res) => {
     const {university_id} = req.body;
 
-    let sql = 'SELECT * FROM events WHERE status = "public" AND Events_university_id = ?';
+    let sql = 'SELECT idEvent, events.name AS eventName, category, description, time, events.date, location, phone, email, rating, numRatings, scoreRatings, rsos.name FROM events INNER JOIN rsos ON events.Events_RSO_id = rsos.idRSO WHERE status = "public" AND Events_university_id = ?';
     db.query(sql, university_id, (err, result) => {
+        if (err)
+        {
+            return res.status(400).send(err);
+        }
+
+        res.json(result);
+
+    });
+});
+
+// @router POST to api/events/
+// @desc   Loads public events
+// @access Public
+router.post('/rating', (req,res) => {
+    const {idEvent, rating, numRatings, scoreRatings} = req.body;
+
+    let sql = 'UPDATE events SET rating = ?, numRatings = ?, scoreRatings =? WHERE idEvent = ?';
+    db.query(sql, [rating, numRatings, scoreRatings, idEvent], (err, result) => {
         if (err)
         {
             return res.status(400).send(err);
@@ -35,6 +53,7 @@ router.post('/public', (req,res) => {
 // @desc   Loads public and private events
 // @access Private
 router.post('/private', (req,res) => {
+    
     const {university_id} = req.body;
 
     let sql = 'SELECT * FROM events WHERE status = "public" OR status = "private" AND Events_university_id = ?';
@@ -55,7 +74,7 @@ router.post('/private', (req,res) => {
 router.post('/rso', auth, (req,res) => {
     const { idUser, university_id } = req.body;
 
-    let sql = 'SELECT idEvent, events.name AS eventName, category, description, time, events.date, location, phone, email, rating, rsos.name FROM events INNER JOIN rso_members ON events.Events_RSO_id = rso_members.RSO_member_RSO_id INNER JOIN rsos ON events.Events_RSO_id = rsos.idRSO WHERE (events.status="rso" AND rso_members.RSO_Member_user_id = ? AND events.Events_university_id = ? AND events.approved = 1) UNION SELECT events.idEvent, events.name AS eventName, events.category, events.description, events.time, events.date, events.location, events.phone, events.email, events.rating, rsos.name FROM events INNER JOIN rsos ON events.Events_RSO_id = rsos.idRSO WHERE (events.Events_university_id = ? AND events.approved = 1 )';
+    let sql = 'SELECT idEvent, events.name AS eventName, category, description, time, events.date, location, phone, email, rating, numRatings, scoreRatings, rsos.name FROM events INNER JOIN rso_members ON events.Events_RSO_id = rso_members.RSO_member_RSO_id INNER JOIN rsos ON events.Events_RSO_id = rsos.idRSO WHERE (events.status="rso" AND rso_members.RSO_Member_user_id = ? AND events.Events_university_id = ? AND events.approved = 1) UNION SELECT events.idEvent, events.name AS eventName, events.category, events.description, events.time, events.date, events.location, events.phone, events.email, events.rating, events.numRatings, events.scoreRatings, rsos.name FROM events INNER JOIN rsos ON events.Events_RSO_id = rsos.idRSO WHERE (events.Events_university_id = ? AND events.approved = 1 )';
     db.query(sql, [idUser, university_id, university_id], (err, result) => {
         if (err)
         {

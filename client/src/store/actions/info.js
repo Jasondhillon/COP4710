@@ -1,17 +1,31 @@
 import axios from 'axios';
 import { returnErrors  } from "./errorActions";
-import { GET_UNIVERSITIES, GET_RSOS, GET_RSOS_ADMIN, CLEAR_RSOS, CLEAR_RSOS_ADMIN } from './constants';
+import { GET_UNIVERSITIES, GET_COMMENTS, GET_RSOS, GET_RSOS_ADMIN, CLEAR_RSOS, CLEAR_RSOS_ADMIN } from './constants';
 
 // Loads the list of universities
 export const getUniversities = () => (dispatch) => 
 {
-    axios.get('/api/info')
+    axios.get('/api/info/universities')
     .then(res => dispatch({
         type: GET_UNIVERSITIES,
         payload: res.data
     }))
     .catch(err => {
         dispatch(returnErrors(err.response.data, err.response.status, 'Error receiving university information'));
+    });
+    
+}
+
+// Loads comments
+export const getComments = () => (dispatch) => 
+{
+    axios.get('/api/info/comments')
+    .then(res => dispatch({
+        type: GET_COMMENTS,
+        payload: res.data
+    }))
+    .catch(err => {
+        dispatch(returnErrors(err.response.data, err.response.status, 'Error receiving event comments'));
     });
     
 }
@@ -35,8 +49,6 @@ export const clearRSOs = () => dispatch => {
         type: CLEAR_RSOS
     })
 }
-
-
 
 // Gets the RSOs the user is an admin of
 export const getRSOsAdmin = (id) => (dispatch, getState) => 

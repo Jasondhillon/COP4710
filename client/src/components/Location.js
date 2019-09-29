@@ -53,7 +53,7 @@ class Location extends Component
                 // Wait for fade to finish
                 setTimeout( () => {
                     this.props.getRSOEvents(id, this.state.current_university_id);
-                }, 600);
+                }, 1000);
             }
         }
         if (!this.props.user.isAuthenticated && prevProps.user.isAuthenticated)
@@ -89,7 +89,7 @@ class Location extends Component
                     this.props.getPublicEvents(this.state.current_university_id);
                 else    
                     this.props.getRSOEvents(this.props.user.user.id, this.state.current_university_id);
-            }, 600);
+            }, 1000);
         }       
         else if (this.state.current_university === "Choose Location")
         {

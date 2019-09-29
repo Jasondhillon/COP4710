@@ -25,6 +25,25 @@ export const getPublicEvents = ( university_id ) => dispatch =>
 
 };
 
+export const updateRating = ( idEvent, rating, numRatings, scoreRatings ) => dispatch =>
+{
+    const config =
+    {
+        headers:
+        {
+            'Content-Type': 'application/json'
+        }
+    }
+    const body = JSON.stringify({ idEvent, rating, numRatings, scoreRatings  });
+    console.log(body);
+
+    axios.post('/api/events/rating', body, config)
+        .catch(err => {
+            dispatch(returnErrors(err.response.data, err.response.status, 'Rating update failed'));
+        });
+
+};
+
 export const clearEvents = () => dispatch =>
 {
     dispatch({
