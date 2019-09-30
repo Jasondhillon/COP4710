@@ -90,8 +90,6 @@ router.post('/create', (req,res) => {
 
     const {name, category, description, time, date, location, phone, email, status, Events_university_id, Events_RSO_id, Events_admin_id, approved} = req.body;
 
-    console.log("api appoved" + {approved});
-
     let sql = 'INSERT INTO events (name, category, description, time, date, location, phone, email, status, Events_university_id, Events_RSO_id, Events_admin_id, approved) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
     db.query(sql, [name, category, description, time, date, location, phone, email, status, Events_university_id, Events_RSO_id, Events_admin_id, approved], (err, result) => {
         if (err)
@@ -104,14 +102,49 @@ router.post('/create', (req,res) => {
     });
 });
 
+
 // @router POST to api/events/approval
 // @desc   Loads events that need admin approval
 // @access Private
-router.post('/approval', auth, (req, res) => {
+router.post('/getUnapprovedEvents', auth, (req, res) => {
     const { university_id } = req.body;
 
-    let sql = 'SELECT * FROM events WHERE approval = 0 AND Events_university_id = ?';
+    let sql = 'SELECT idEvent, events.name AS eventName, category, description, time, events.date, location, phone, email, rating, numRatings, scoreRatings, rsos.name FROM events INNER JOIN rsos ON events.Events_RSO_id = rsos.idRSO WHERE events.approved = 0 AND events.Events_university_id = ?';
     db.query(sql, university_id, (err, result) => {
+        if (err) {
+            return res.status(400).send(err);
+        }
+
+        res.json(result);
+
+    });
+});
+
+// @router POST to api/events/approval
+// @desc   Loads events that need admin approval
+// @access Private
+router.post('/approveEvent', auth, (req, res) => {
+    const { idEvent } = req.body;
+
+    let sql = 'UPDATE events SET approved = 1 WHERE idEvent = ?';
+    db.query(sql, idEvent, (err, result) => {
+        if (err) {
+            return res.status(400).send(err);
+        }
+
+        res.json(result);
+
+    });
+});
+
+// @router POST to api/events/approval
+// @desc   Loads events that need admin approval
+// @access Private
+router.post('/denyEvent', auth, (req, res) => {
+    const { idEvent } = req.body;
+
+    let sql = 'DELETE FROM events WHERE idEvent = ?';
+    db.query(sql, idEvent, (err, result) => {
         if (err) {
             return res.status(400).send(err);
         }

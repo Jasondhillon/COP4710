@@ -5,14 +5,11 @@ const initalState =
     universities: [],
     
     rsos: [{
-        name: "No RSO's left to join",
-        idRSO: 0
+        idRSO: 0,
+        name: "No RSO's left to join"
     }],
 
-    rsosAdmin: [{
-        name: "Public Event",
-        idRSO: 0
-    }],
+    rsosAdmin: [],
 
     comments: []
 }
@@ -49,7 +46,7 @@ export default function(state = initalState, action)
         case GET_RSOS:
             return {
                 ...state,
-                rsos: action.payload.concat(state.rsos)
+                rsos: action.payload.filter(rso => rso.idRSO !== 42).concat(state.rsos)
             }
         case CLEAR_RSOS:
             return {

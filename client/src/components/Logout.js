@@ -18,10 +18,12 @@ export class Logout extends Component
     }
 
     logOut = () => {
-        this.props.logout();
         this.props.clearEvents();
+        setTimeout( () => {
+            this.props.logout();
         this.props.clearRSOs();
         this.props.clearRSOsAdmin();
+        },1000);
     };
 }
 

@@ -19,7 +19,7 @@ class EventModal extends Component
         location: '',
         phone: '',
         email: '',
-        status: '',
+        status: 'rso',
         university: '',
         rso: 0,
         admin_id: '',
@@ -47,16 +47,12 @@ class EventModal extends Component
     }
 
     onSelect = (e) => {
-        const {id, name} = e.target.split(",");
-        console.log(id + " EREWR " + name);
+        const [name, id] = e.target.value.split(",");
+
         this.setState({
             rso: id, 
             eventName:name
         });
-        // if (this.state.rso !== "0")
-        // {
-        //     this.setState({approved: 1});
-        // }
     }
 
     onSubmit = (e) => {
@@ -67,7 +63,7 @@ class EventModal extends Component
 
         let app = 0;
 
-        if (this.state.rso !== 0)
+        if (this.state.rso !== "42")
         {
             app = 1;
         }
@@ -104,7 +100,7 @@ class EventModal extends Component
             location: '',
             phone: '',
             email: '',
-            status: '',
+            status: 'rso',
             university: '',
             rso: this.props.rsos[0].idRSO,
             admin_id: '',
@@ -188,9 +184,9 @@ class EventModal extends Component
                                     placeholder="Email"
                                     onChange={this.onChange}/>
                                 <Input type="select" name="status" id="status" onChange={this.onChange}>
-                                    <option value = "public">Public Event</option>
-                                    <option value = "private">College Event</option>
                                     <option value = "rso">Club Members only</option>
+                                    <option value = "private">College Event</option>
+                                    <option value = "public">Public Event</option>
                                 </Input>
                                 <Button
                                     color="primary"
