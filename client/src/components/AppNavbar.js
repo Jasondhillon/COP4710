@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import {Collapse,Navbar,NavbarToggler,NavbarBrand, Nav,NavItem, Container} from 'reactstrap';
 import RegisterModal from'./RegisterModal';
 import RSOModal from './RSOModal';
+import CreateRSO from'./CreateRSO';
 import Logout from './Logout';
 import LoginModal from './LoginModal';
 import { connect } from 'react-redux';
@@ -45,6 +46,7 @@ class AppNavbar extends Component
                 <NavItem>
                     <RSOModal />
                 </NavItem>
+                <CreateRSO />
                 <NavItem>
                     <Logout />
                 </NavItem>

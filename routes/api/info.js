@@ -48,7 +48,7 @@ router.get('/comments', (req, res) =>
 // @access Private
 router.post('/rsos', (req, res) => {
     const { id, university_id } = req.body;
-    let sql = 'SELECT idRSO, name FROM rsos WHERE NOT EXISTS (SELECT RSO_Member_RSO_id FROM rso_members WHERE rsos.idRSO = rso_members.RSO_Member_RSO_id AND RSO_Member_user_id = ?) AND RSOs_university_id = ?';
+    let sql = 'SELECT idRSO, name, approved FROM rsos WHERE NOT EXISTS (SELECT RSO_Member_RSO_id FROM rso_members WHERE rsos.idRSO = rso_members.RSO_Member_RSO_id AND RSO_Member_user_id = ?) AND RSOs_university_id = ?';
     db.query(sql, [id, university_id], (err, result) => {
         if (err) {
             return res.status(400).send(err);
@@ -63,7 +63,7 @@ router.post('/rsos', (req, res) => {
 router.post('/adminRsos', auth, (req, res) => 
 {
     const { id } = req.body;
-    let sql = 'SELECT idRSO, name FROM rsos WHERE RSOs_admin_id = ?';
+    let sql = 'SELECT idRSO, name, approved FROM rsos WHERE RSOs_admin_id = ?';
     db.query(sql, id, (err, result) => {
         if (err)
         {

@@ -126,11 +126,12 @@ class EventModal extends Component
                             <FormGroup>
                                 <Label>Choose RSO to make the event for:</Label>
                                 <Input type="select" name="rso" id="rso" onChange={this.onSelect}>
-                                    {this.props.rsos.map(({ name, idRSO }) => (
+                                    {this.props.rsos.map(({ name, idRSO, approved }) => (
                                     <option 
+                                        disabled={approved ? false : true}
                                         key ={name} 
                                         value = {[name, idRSO]}>
-                                    {name}
+                                    {name} {approved ? "" : " (Unapproved)"}
                                     </option>
                                 ))}
                                 </Input>

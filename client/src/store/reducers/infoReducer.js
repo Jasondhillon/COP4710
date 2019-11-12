@@ -6,7 +6,8 @@ const initalState =
     
     rsos: [{
         idRSO: 0,
-        name: "No RSO's left to join"
+        name: "No RSO's left to join",
+        approved: 0
     }],
 
     rsosAdmin: [],
