@@ -44,9 +44,12 @@ class AppNavbar extends Component
         const authLinks = (
             <Fragment>
                 <NavItem>
+                    <CreateRSO />
+                </NavItem>
+                <NavItem>
                     <RSOModal />
                 </NavItem>
-                <CreateRSO />
+                    <CreateRSO />
                 <NavItem>
                     <Logout />
                 </NavItem>

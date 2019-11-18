@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Input, NavLink, Alert } from 'reactstrap';
-import { createRSO } from '../store/actions/rso';
+import { Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Input, NavLink} from 'reactstrap';
 import { connect } from 'react-redux';
-import { clearErrors } from '../store/actions/errorActions';
 
-class CreateRSO extends Component 
+class CreateUniversity extends Component 
 {
+    // Component state, different from redux/application state
     state = 
     {
         modal: false,
-        name: '',
-        msg: null
+        name: ''
     }
 
     toggle = () => 
@@ -26,33 +24,26 @@ class CreateRSO extends Component
         
     }
 
-    componentDidUpdate(prevProps) {
-        const { error } = this.props;
-
-        if (error !== prevProps.error)
-            if (error.id === 'Error creating RSO')
-                this.setState({ msg: error.msg });
-            else if (error.id === null)
-            {
-                this.setState({ msg: null, modal:false });
-            }
-
-    }
-
     onSubmit = (e) => {
         e.preventDefault();
 
-        const { id, university_id } = this.props.auth.user;
+        //const { id, university_id } = this.props.auth.user;
 
-        const RSO = {
-            name: this.state.name,
-            approved: 0,
-            RSOs_admin_id: id,
-            RSOs_university_id: university_id
-        }
+        // const event = {
+        //     name: this.state.name,
+        //     RSOs_admin_id: id,
+        //     RSOs_university_id: university_id
+        // }
 
-        this.props.createRSO(RSO);
+        // TODO: Create RSO function
 
+        // Close modal
+        this.toggle();
+
+        this.setState({
+            modal: false,
+            name: ''
+        });
     }
 
     render()
@@ -62,13 +53,12 @@ class CreateRSO extends Component
                 <NavLink href="#"
                     color="light"
                     onClick={this.toggle}
-                >Create RSO</NavLink>
+                >Create University</NavLink>
                 <Modal
                     isOpen={this.state.modal}
                     toggle={this.toggle}>
-                    <ModalHeader toggle={this.toggle}>Create New RSO</ModalHeader>
+                    <ModalHeader toggle={this.toggle}>Create New University</ModalHeader>
                     <ModalBody>
-                        {this.state.msg ? (<Alert color="danger">{this.state.msg}</Alert>) : null}
                         <Form onSubmit={this.onSubmit}>
                             <FormGroup>
                                 <Input
@@ -92,9 +82,7 @@ class CreateRSO extends Component
 }
 
 const mapStateToProps = state => ({
-    auth: state.auth,
-    error: state.error
-
+    auth: state.auth
 });
 
-export default connect(mapStateToProps, { createRSO, clearErrors })(CreateRSO);
+export default connect(mapStateToProps, { })(CreateUniversity);
