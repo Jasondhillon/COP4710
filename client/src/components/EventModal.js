@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Input, Label} from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Input, Label, Alert} from 'reactstrap';
 import { connect } from 'react-redux';
 import { getRSOsAdmin } from '../store/actions/info';
 import { createEvent } from '../store/actions/events';
@@ -15,6 +15,7 @@ class EventModal extends Component
         category: 'Meeting',
         description: '',
         time: '',
+        time_period: 'PM',
         date: '',
         location: '',
         phone: '',
@@ -23,7 +24,8 @@ class EventModal extends Component
         university: '',
         rso: 0,
         admin_id: '',
-        approved: ''
+        approved: '',
+        msg: null
     }
 
     componentDidMount()
@@ -56,7 +58,6 @@ class EventModal extends Component
     }
 
     onSubmit = (e) => {
-        // Stops the form from submitting
         e.preventDefault();
 
         const { id, university_id } = this.props.auth.user;
@@ -68,44 +69,53 @@ class EventModal extends Component
             app = 1;
         }
 
-        const event = {
-            name: this.state.name,
-            eventName: this.state.eventName,
-            category: this.state.category,
-            description: this.state.description,
-            time: this.state.time,
-            date: this.state.date,
-            location: this.state.location,
-            phone: this.state.phone,
-            email: this.state.email,
-            status: this.state.status,
-            Events_university_id: university_id,
-            Events_RSO_id: this.state.rso,
-            Events_admin_id: id,
-            approved: app
+        if (!Number.isInteger(this.state.time))
+            this.setState({msg: 'Time is in the wrong format (H)'})
+
+        // TODO: Make sure no duplicate events occur at same location and at the same time
+        
+        else
+        {
+            const event = {
+                name: this.state.name,
+                eventName: this.state.eventName,
+                category: this.state.category,
+                description: this.state.description,
+                time: this.state.time + time.state.time_period,
+                date: this.state.date,
+                location: this.state.location,
+                phone: this.state.phone,
+                email: this.state.email,
+                status: this.state.status,
+                Events_university_id: university_id,
+                Events_RSO_id: this.state.rso,
+                Events_admin_id: id,
+                approved: app
+            }
+            this.props.createEvent(event);
+
+            // Close modal
+            this.toggle();
+
+            this.setState({
+                modal: false,
+                name: '',
+                eventName:'',
+                category: 'Meeting',
+                description: '',
+                time: '',
+                time_period: 'PM',
+                date: '',
+                location: '',
+                phone: '',
+                email: '',
+                status: 'rso',
+                university: '',
+                rso: this.props.rsos[0].idRSO,
+                admin_id: '',
+                approved: 0
+            });
         }
-        this.props.createEvent(event);
-
-        // Close modal
-        this.toggle();
-
-        this.setState({
-            modal: false,
-            name: '',
-            eventName:'',
-            category: 'Meeting',
-            description: '',
-            time: '',
-            date: '',
-            location: '',
-            phone: '',
-            email: '',
-            status: 'rso',
-            university: '',
-            rso: this.props.rsos[0].idRSO,
-            admin_id: '',
-            approved: 0
-        });
     }
 
     render()
@@ -122,6 +132,7 @@ class EventModal extends Component
                     toggle={this.toggle}>
                     <ModalHeader toggle={this.toggle}>New Event</ModalHeader>
                     <ModalBody>
+                        {this.state.msg ? (<Alert color="danger">{this.state.msg}</Alert>) : null}
                         <Form onSubmit={this.onSubmit}>
                             <FormGroup>
                                 <Label>Choose RSO to make the event for:</Label>
@@ -160,6 +171,10 @@ class EventModal extends Component
                                     id="time"
                                     placeholder="Time"
                                     onChange={this.onChange}/>
+                                <Input type="select" name="time_period" id="time_period" onChange={this.onChange}>
+                                    <option value="PM">PM</option>
+                                    <option value="AM">AM</option>
+                                </Input>
                                 <Input
                                     type="text"
                                     name="date"
