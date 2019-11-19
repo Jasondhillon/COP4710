@@ -2,10 +2,10 @@ import axios from 'axios';
 import { returnErrors, clearErrors  } from "./errorActions";
 import {GET_UNIVERSITIES, GET_COMMENTS, GET_RSOS, GET_RSOS_ADMIN, CLEAR_RSOS, CLEAR_RSOS_ADMIN } from './constants';
 
-// Loads the list of universities
-export const createUniversity = () => (dispatch) => 
+// Create a new university
+export const createUniversity = (University) => (dispatch) => 
 {
-    axios.get('/api/info/universities')
+    axios.post('/api/info/newUniversity')
     .then(() => dispatch(clearErrors()))
     .catch(err => {
         dispatch(returnErrors("University already exists", err.response.status, 'Error creating university'));
@@ -13,9 +13,9 @@ export const createUniversity = () => (dispatch) =>
     
 }
 
-// Create a new university
+// Loads the list of universities
 export const getUniversities = () => (dispatch) => {
-    axios.post('/api/info/newUniversity')
+    axios.get('/api/info/universities')
         .then(res => dispatch({
             type: GET_UNIVERSITIES,
             payload: res.data

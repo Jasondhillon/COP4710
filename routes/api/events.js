@@ -74,7 +74,7 @@ router.post('/private', (req,res) => {
 router.post('/rso', auth, (req,res) => {
     const { idUser, university_id } = req.body;
 
-    let sql = 'SELECT idEvent, events.name AS eventName, category, description, time, events.date, location, phone, email, rating, numRatings, scoreRatings, rsos.name FROM events INNER JOIN rso_members ON events.Events_RSO_id = rso_members.RSO_member_RSO_id INNER JOIN rsos ON events.Events_RSO_id = rsos.idRSO WHERE (events.status="rso" AND rso_members.RSO_Member_user_id = ? AND events.Events_university_id = ? AND events.approved = 1) UNION SELECT events.idEvent, events.name AS eventName, events.category, events.description, events.time, events.date, events.location, events.phone, events.email, events.rating, events.numRatings, events.scoreRatings, rsos.name FROM events INNER JOIN rsos ON events.Events_RSO_id = rsos.idRSO WHERE (events.Events_university_id = ? AND events.approved = 1 )';
+    let sql = 'SELECT idEvent,  rsos.name, rsos.idRSO, events.name AS eventName, Events_university_id, events.status, category, description, time, events.date, location, phone, email, rating, numRatings, scoreRatings, RSO_Member_user_id FROM events INNER JOIN rso_members ON events.Events_RSO_id = rso_members.RSO_member_RSO_id AND RSO_Member_user_id = ? INNER JOIN rsos ON events.Events_RSO_id = rsos.idRSO AND Events_university_id = ? GROUP BY idEvent UNION SELECT idEvent,  rsos.name, rsos.idRSO, events.name AS eventName, Events_university_id, events.status, category, description, time, events.date, location, phone, email, rating, numRatings, scoreRatings, RSO_Member_user_id FROM events, rso_members, rsos WHERE events.Events_RSO_id = rsos.idRSO AND (events.Events_university_id = ? AND events.approved = 1 AND events.status = "public") GROUP BY idEvent';
     db.query(sql, [idUser, university_id, university_id], (err, result) => {
         if (err)
         {
@@ -101,6 +101,23 @@ router.post('/create', (req,res) => {
 
     });
 });
+
+router.post('/checkTime', (req,res) => {
+
+    const {university, location, date, time} = req.body;
+
+    let sql = 'SELECT COUNT(*) as count FROM events WHERE (Events_university_id = ? AND location = ? AND date = ? AND time = ?)';
+    db.query(sql, [university, location, date, time], (err, result) => {
+        // if (result[0].count >= 1)
+        // {
+        //     return res.status(400).send(err);
+        // }
+        // else
+            res.json(result[0].count);
+
+    });
+});
+
 
 
 // @router POST to api/events/approval

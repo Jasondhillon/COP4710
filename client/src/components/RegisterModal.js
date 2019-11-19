@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { register } from '../store/actions/auth';
 import { clearErrors } from '../store/actions/errorActions';
-import { getPrivateEvents } from '../store/actions/events';
+import { getPrivateEvents, clearEvents } from '../store/actions/events';
 
 class RegisterModal extends Component {
     // Component state, different from redux/application state
@@ -40,7 +40,15 @@ class RegisterModal extends Component {
         // Closes the modal if the registration is successful
         if (this.state.modal)
             if (isAuthenticated)
-            this.toggle();
+            {
+                this.props.clearEvents();
+
+                // Wait for fade to finish
+                setTimeout( () => {
+                    this.props.getPrivateEvents(this.state.auth.user.Users.university_id);
+                }, 1000);
+                this.toggle();
+            }
     }
 
     toggle = () => {
@@ -66,27 +74,37 @@ class RegisterModal extends Component {
     onSubmit = (e) => {
         // Stops the form from submitting
         e.preventDefault();
-        if (this.state.university_id === "")
-        {
-            this.setState({
-                university_id: this.props.universities.universities[0].idUniversity,
-                university_name: this.props.universities.universities[0].name
-            });
-        }
 
         const { userName, password, auth_level, university_id, university_name } = this.state;
 
-        const newUser = {
-            userName,
-            password,
-            auth_level,
-            university_id,
-            university_name
+        if (!Number.isInteger(this.state.university_id))
+        {
+            const newUser = {
+                userName,
+                password,
+                auth_level,
+                university_id: this.props.universities.universities[0].idUniversity,
+                university_name: this.props.universities.universities[0].name
+            }
+
+            // Add contact via addContact action
+            this.props.register(newUser);
         }
 
-        // Add contact via addContact action
-        this.props.register(newUser);
-        this.props.getPrivateEvents(university_id);
+        else
+        {
+
+            const newUser = {
+                userName,
+                password,
+                auth_level,
+                university_id,
+                university_name
+            }
+
+            // Add contact via addContact action
+            this.props.register(newUser);
+        }
 
     }
 
@@ -152,4 +170,4 @@ const mapStateToProps = state => ({
     error: state.error
 });
 
-export default connect(mapStateToProps, { register, clearErrors, getPrivateEvents })(RegisterModal);
+export default connect(mapStateToProps, { register, clearErrors, clearEvents, getPrivateEvents })(RegisterModal);

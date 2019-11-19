@@ -1,9 +1,10 @@
-import { GET_PUBLIC_EVENTS, GET_PRIVATE_EVENTS, GET_RSO_EVENTS, GET_UNAPPROVED_EVENTS, APPROVE_EVENT, DENY_EVENT, ADD_UNAPPROVED_EVENT, CREATE_EVENT, CLEAR_EVENTS } from '../actions/constants';
+import { GET_PUBLIC_EVENTS, GET_PRIVATE_EVENTS, GET_RSO_EVENTS, GET_UNAPPROVED_EVENTS, APPROVE_EVENT, DENY_EVENT, ADD_UNAPPROVED_EVENT, CREATE_EVENT, CLEAR_EVENTS , CHECK_EVENT_TIME} from '../actions/constants';
 
 const initalState = 
 {
     events: [],
     unApprovedEvents: [],
+    timeCheck: 0
 }
 
 export default function(state = initalState, action)
@@ -19,6 +20,7 @@ export default function(state = initalState, action)
             }
         case CLEAR_EVENTS:
             return {
+                ...state,
                 events: [],
                 unApprovedEvents: []
             }
@@ -46,6 +48,11 @@ export default function(state = initalState, action)
             return {
                 ...state,
                 unApprovedEvents: [action.payload, ...state.unApprovedEvents]
+            }
+        case CHECK_EVENT_TIME:
+            return {
+                ...state,
+                timeCheck: action.payload
             }
         default:
             return state;

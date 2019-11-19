@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Input, Label, Alert} from 'reactstrap';
 import { connect } from 'react-redux';
 import { getRSOsAdmin } from '../store/actions/info';
-import { createEvent } from '../store/actions/events';
+import { createEvent, checkTime } from '../store/actions/events';
+import { clearErrors } from '../store/actions/errorActions';
 
 class EventModal extends Component 
 {
@@ -15,7 +16,7 @@ class EventModal extends Component
         category: 'Meeting',
         description: '',
         time: '',
-        time_period: 'PM',
+        time_period: 'pm',
         date: '',
         location: '',
         phone: '',
@@ -38,7 +39,8 @@ class EventModal extends Component
         this.setState({
             modal: !this.state.modal,
             rso: this.props.rsos[0].idRSO,
-            eventName: this.props.rsos[0].name
+            eventName: this.props.rsos[0].name,
+            msg: null
         });
 
     }
@@ -57,65 +59,95 @@ class EventModal extends Component
         });
     }
 
+    // componentDidUpdate(prevProps) {
+    //     const { error } = this.props;
+    //     if (error !== prevProps.error)
+    //         if (error.id === 'Timing Conflict')
+    //             this.setState({ msg: error.msg.msg });
+    //         else if (error.id === null)
+    //             this.setState({ msg: null, modal: false });
+    // }
+
     onSubmit = (e) => {
         e.preventDefault();
-
+        this.setState({msg:null});
         const { id, university_id } = this.props.auth.user;
 
-        let app = 0;
+        console.log(university_id + ", " + this.state.location + ", " + this.state.date, this.state.time + "" + this.state.time_period);
 
-        if (this.state.rso !== "42")
-        {
-            app = 1;
-        }
+        this.props.checkTime(university_id, this.state.location, this.state.date, this.state.time + "" + this.state.time_period);
 
-        if (!Number.isInteger(this.state.time))
-            this.setState({msg: 'Time is in the wrong format (H)'})
+        // this.props.checkTime(2, "My house","9/25/18", "6:00pm");
 
-        // TODO: Make sure no duplicate events occur at same location and at the same time
-        
-        else
-        {
-            const event = {
-                name: this.state.name,
-                eventName: this.state.eventName,
-                category: this.state.category,
-                description: this.state.description,
-                time: this.state.time + time.state.time_period,
-                date: this.state.date,
-                location: this.state.location,
-                phone: this.state.phone,
-                email: this.state.email,
-                status: this.state.status,
-                Events_university_id: university_id,
-                Events_RSO_id: this.state.rso,
-                Events_admin_id: id,
-                approved: app
+        // setTimeout( () => {
+        //     console.log(this.props.events.timeCheck);
+        //  }, 100);
+
+        setTimeout( () => {
+            console.log(this.props.events.timeCheck);
+
+            if (this.props.events.timeCheck === 0)
+            {
+                let app = 0;
+                let status = this.state.status;
+    
+                if (this.state.rso !== "42")
+                {
+                    app = 1;
+                    status = "Public";
+                }
+    
+                // if (Number.isInteger(this.state.time))
+                //     this.setState({msg: 'Time is in the wrong format (H)'})
+                
+                const event = {
+                    name: this.state.name,
+                    eventName: this.state.eventName,
+                    category: this.state.category,
+                    description: this.state.description,
+                    time: this.state.time + this.state.time_period,
+                    date: this.state.date,
+                    location: this.state.location,
+                    phone: this.state.phone,
+                    email: this.state.email,
+                    status: this.state.status,
+                    Events_university_id: university_id,
+                    Events_RSO_id: this.state.rso,
+                    Events_admin_id: id,
+                    approved: app
+                }
+                this.props.createEvent(event);
+    
+                // Close modal
+                this.toggle();
+    
+                this.setState({
+                    modal: false,
+                    name: '',
+                    eventName:'',
+                    category: 'Meeting',
+                    description: '',
+                    time: '',
+                    time_period: 'pm',
+                    date: '',
+                    location: '',
+                    phone: '',
+                    email: '',
+                    status: 'rso',
+                    university: '',
+                    rso: this.props.rsos[0].idRSO,
+                    admin_id: '',
+                    approved: 0
+                });
             }
-            this.props.createEvent(event);
-
-            // Close modal
-            this.toggle();
-
-            this.setState({
-                modal: false,
-                name: '',
-                eventName:'',
-                category: 'Meeting',
-                description: '',
-                time: '',
-                time_period: 'PM',
-                date: '',
-                location: '',
-                phone: '',
-                email: '',
-                status: 'rso',
-                university: '',
-                rso: this.props.rsos[0].idRSO,
-                admin_id: '',
-                approved: 0
-            });
-        }
+            
+            else
+            {
+                this.setState({msg:"This event time is already taken, please choose a different time of day"});
+            }
+        }, 500);
+        
+       
     }
 
     render()
@@ -139,7 +171,6 @@ class EventModal extends Component
                                 <Input type="select" name="rso" id="rso" onChange={this.onSelect}>
                                     {this.props.rsos.map(({ name, idRSO, approved }) => (
                                     <option 
-                                        disabled={approved ? false : true}
                                         key ={name} 
                                         value = {[name, idRSO]}>
                                     {name} {approved ? "" : " (Unapproved)"}
@@ -172,8 +203,8 @@ class EventModal extends Component
                                     placeholder="Time"
                                     onChange={this.onChange}/>
                                 <Input type="select" name="time_period" id="time_period" onChange={this.onChange}>
-                                    <option value="PM">PM</option>
-                                    <option value="AM">AM</option>
+                                    <option value="pm">PM</option>
+                                    <option value="am">AM</option>
                                 </Input>
                                 <Input
                                     type="text"
@@ -201,7 +232,7 @@ class EventModal extends Component
                                     onChange={this.onChange}/>
                                 <Input type="select" name="status" id="status" onChange={this.onChange}>
                                     <option value = "rso">Club Members only</option>
-                                    <option value = "private">College Event</option>
+                                    <option value = "private">College Wide Event</option>
                                     <option value = "public">Public Event</option>
                                 </Input>
                                 <Button
@@ -220,7 +251,8 @@ class EventModal extends Component
 
 const mapStateToProps = state => ({
     auth: state.auth,
-    rsos: state.info.rsosAdmin
+    rsos: state.info.rsosAdmin,
+    events: state.events
 });
 
-export default connect(mapStateToProps, { getRSOsAdmin, createEvent })(EventModal);
+export default connect(mapStateToProps, { getRSOsAdmin, createEvent, clearErrors, checkTime })(EventModal);

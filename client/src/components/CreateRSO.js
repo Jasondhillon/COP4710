@@ -33,10 +33,7 @@ class CreateRSO extends Component
             if (error.id === 'Error creating RSO')
                 this.setState({ msg: error.msg });
             else if (error.id === null)
-            {
                 this.setState({ msg: null, modal:false });
-            }
-
     }
 
     onSubmit = (e) => {

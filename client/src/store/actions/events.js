@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { returnErrors  } from "./errorActions";
-import { GET_PUBLIC_EVENTS, GET_PRIVATE_EVENTS, GET_RSO_EVENTS, CREATE_EVENT, CLEAR_EVENTS, GET_UNAPPROVED_EVENTS, APPROVE_EVENT, DENY_EVENT, ADD_UNAPPROVED_EVENT } from './constants';
+import { returnErrors, clearErrors  } from "./errorActions";
+import { GET_PUBLIC_EVENTS, GET_PRIVATE_EVENTS, GET_RSO_EVENTS, CREATE_EVENT, CLEAR_EVENTS, GET_UNAPPROVED_EVENTS, APPROVE_EVENT, DENY_EVENT, ADD_UNAPPROVED_EVENT, CHECK_EVENT_TIME} from './constants';
 
 
 export const getPublicEvents = ( university_id ) => dispatch =>
@@ -35,7 +35,6 @@ export const updateRating = ( idEvent, rating, numRatings, scoreRatings ) => dis
         }
     }
     const body = JSON.stringify({ idEvent, rating, numRatings, scoreRatings  });
-    console.log(body);
 
     axios.post('/api/events/rating', body, config)
         .catch(err => {
@@ -134,10 +133,25 @@ export const createEvent = ({ name, eventName, category, description, time, date
             dispatch(returnErrors(err.response.data, err.response.status, ' Error creating event'));
         });
     }
-
-    
     
 }
+
+export const checkTime = (university, location, date, time ) => (dispatch, getState) =>
+{
+    const body = JSON.stringify({university, location, date, time});
+
+    axios.post('/api/events/checkTime', body, tokenConfig(getState))
+        .then(res => {
+            
+            dispatch({
+            type: CHECK_EVENT_TIME,
+            payload: res.data
+        })})
+        .catch(err => {
+            dispatch(returnErrors("This event time is already taken, please choose a different time of day", err.response.status, 'Timing Conflict'));
+        });
+
+};
 
 export const getUnapprovedEvents = (university_id) => (dispatch, getState) => {
 
@@ -172,7 +186,6 @@ export const approveEvent = (idEvent) => (dispatch, getState) => {
 export const denyEvent = (idEvent) => (dispatch, getState) => {
 
     const body = JSON.stringify({ idEvent });
-    console.log(idEvent);
 
     axios.post('/api/events/denyEvent', body, tokenConfig(getState))
         .then(res => dispatch({

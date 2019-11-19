@@ -14,8 +14,6 @@ const db = mySql.createPool({
     database : config.get('database')
 });
 
-
-
 // @router GET to api/auth/
 // @desc   Loads a user from token
 // @access Private
@@ -95,7 +93,7 @@ router.post('/login', (req, res) =>
     const {userName, password} = req.body;
 
     // Check if request has both a username and password
-    if (!userName || !password)
+    if (userName === '' || password ==='')
         return res.status(400).json({ msg: 'Please enter username and password'});
 
     // Make mySQL query to database -> table: users
@@ -107,7 +105,8 @@ router.post('/login', (req, res) =>
         }
 
         // Check if empty response indicating no username found
-        if (Object.keys(result[0]).length === 0)
+
+        if (Object.keys(result).length !== 1)
             return res.status(400).json({ msg: 'Username not found'});
 
         // Check if password matches

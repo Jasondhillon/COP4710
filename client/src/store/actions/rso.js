@@ -9,9 +9,11 @@ export const joinRSO = (RSO) => (dispatch, getState) =>
         });
 }
 
-export const createRSO = (RSO) => (dispatch, getState) =>
+export const createRSO = ({name, approved, RSOs_admin_id, RSOs_university_id}) => (dispatch, getState) =>
 {
-    axios.post('/api/rso/create', RSO, tokenConfig(getState))
+    const body = JSON.stringify({name, approved, RSOs_admin_id, RSOs_university_id});
+    
+    axios.post('/api/rso/create', body, tokenConfig(getState))
     .then(() => {
         dispatch(clearErrors());
     })

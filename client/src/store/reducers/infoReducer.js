@@ -10,7 +10,11 @@ const initalState =
         approved: 0
     }],
 
-    rsosAdmin: [],
+    rsosAdmin: [{
+        idRSO: 0,
+        name: "Public Event (Pending approval of SuperAdmin)",
+        approved: 0
+    }],
 
     comments: []
 }
@@ -65,10 +69,7 @@ export default function(state = initalState, action)
         case CLEAR_RSOS_ADMIN:
             return {
                 ...state,
-                rsosAdmin: [{
-                    name: "Public Event",
-                    idRSO: 0
-                }]
+                rsosAdmin: []
             }
         default:
             return state;

@@ -31,7 +31,7 @@ router.get('/universities', (req, res) =>
 // @router Post api/info/
 // @desc   Create a new universities 
 // @access Private
-router.get('/newUniversity',auth, (req, res) => 
+router.get('/newUniversity', auth, (req, res) => 
 {
     let {name} = req;
     let sql = 'INSERT INTO universities VALUES() = (?)';

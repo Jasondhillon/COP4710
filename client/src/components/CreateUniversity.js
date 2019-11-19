@@ -98,3 +98,9 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps, { createUniversity, clearErrors})(CreateUniversity);
+
+/*
+    // "host"  : "us-cdbr-iron-east-02.cleardb.net",
+    // "user" : "b62fbd4d6da0de",
+    // "password" : "82cebe5c",
+    // "database" :"heroku_8a8e9bdedc4afce" */

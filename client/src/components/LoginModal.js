@@ -12,7 +12,7 @@ class LoginModal extends Component {
             modal: false,
             userName: '',
             password: '',
-            msg: null
+            msg: ''
         }
 
     staticPropTypes =
@@ -29,7 +29,7 @@ class LoginModal extends Component {
             if (error.id === 'LOGIN_FAIL')
                 this.setState({ msg: error.msg.msg });
             else
-                this.setState({ msg: null });
+                this.setState({ msg: '' });
 
         // Closes the modal if the login is successful
         if (this.state.modal)
@@ -59,7 +59,8 @@ class LoginModal extends Component {
 
         const { userName, password } = this.state;
 
-        const user = {
+        const user = 
+        {
             userName,
             password
         }

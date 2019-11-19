@@ -39,14 +39,14 @@ class Events extends Component
 
     render() {
 
-        const { auth } = this.state.auth;
+        const { isAuthenticated } = this.props.auth;
 
         return(
             <Container>
                 <Accordion style={{display: 'flex', justifyContent: 'center'}}>
                     <TransitionGroup className="events-list" style={{opacity: .85}}>
                     {this.props.events.map(({ idEvent, eventName, category, description,
-                        name, time, date, location, phone, email, rating, numRatings, scoreRatings }) => (
+                        name, time, date, location, phone, email, rating, numRatings, scoreRatings, Events_university_id }) => (
                         <CSSTransition key={idEvent} timeout={1000} classNames="fade">
                             <Card>
                                 <Accordion.Toggle style={{paddingLeft:'4rem' , paddingRight:'4rem'}} as={Card.Header} eventKey={idEvent}>
@@ -61,7 +61,7 @@ class Events extends Component
                                         <Card.Subtitle>{location}</Card.Subtitle>
                                         <Card.Subtitle>{phone}</Card.Subtitle>
                                         <Card.Subtitle>{email}</Card.Subtitle>
-                                            <StarRatings name={[idEvent, rating, numRatings, scoreRatings]} rating={rating} changeRating={auth ? this.changeRating : null}/>
+                                            <StarRatings name={[idEvent, rating, numRatings, scoreRatings]} rating={rating} changeRating={isAuthenticated ? this.changeRating : null}/>
                                         <Comments eventId={idEvent}/>
                                     </Card.Body>
                                 </Accordion.Collapse>
@@ -85,7 +85,6 @@ Events.propTypes =
 }
 
 const mapStateToProps = state => ({
-    university: state.events.current_location,
     events: state.events.events,
     auth: state.auth,
 });

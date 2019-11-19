@@ -29,10 +29,11 @@ router.post('/join', auth, (req,res) => {
 
 router.post('/create', auth, (req,res) => {
     const {name, approved, RSOs_admin_id, RSOs_university_id} = req.body;
-    let sql = 'INSERT INTO rsos (name, approved, RSOs_admin_id, RSOs_university_id) VALUES ( ? , ?, ?, ?)';
+
+    let sql = 'INSERT INTO rsos (name, approved, RSOs_admin_id, RSOs_university_id) VALUES ( ?, ?, ?, ?)';
     db.query(sql, [name, approved, RSOs_admin_id, RSOs_university_id], (err, result) => {
         if (err)
-        {
+        {   
             return res.status(400).send(err);
         }
 
