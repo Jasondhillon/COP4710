@@ -39,6 +39,8 @@ class Events extends Component
 
     render() {
 
+        const { auth } = this.state.auth;
+
         return(
             <Container>
                 <Accordion style={{display: 'flex', justifyContent: 'center'}}>
@@ -59,7 +61,7 @@ class Events extends Component
                                         <Card.Subtitle>{location}</Card.Subtitle>
                                         <Card.Subtitle>{phone}</Card.Subtitle>
                                         <Card.Subtitle>{email}</Card.Subtitle>
-                                        <StarRatings name={[idEvent, rating, numRatings, scoreRatings]} rating={rating} changeRating={this.changeRating}/>
+                                            <StarRatings name={[idEvent, rating, numRatings, scoreRatings]} rating={rating} changeRating={auth ? this.changeRating : null}/>
                                         <Comments eventId={idEvent}/>
                                     </Card.Body>
                                 </Accordion.Collapse>

@@ -1,19 +1,29 @@
 import axios from 'axios';
-import { returnErrors  } from "./errorActions";
-import { GET_UNIVERSITIES, GET_COMMENTS, GET_RSOS, GET_RSOS_ADMIN, CLEAR_RSOS, CLEAR_RSOS_ADMIN } from './constants';
+import { returnErrors, clearErrors  } from "./errorActions";
+import {GET_UNIVERSITIES, GET_COMMENTS, GET_RSOS, GET_RSOS_ADMIN, CLEAR_RSOS, CLEAR_RSOS_ADMIN } from './constants';
 
 // Loads the list of universities
-export const getUniversities = () => (dispatch) => 
+export const createUniversity = () => (dispatch) => 
 {
     axios.get('/api/info/universities')
-    .then(res => dispatch({
-        type: GET_UNIVERSITIES,
-        payload: res.data
-    }))
+    .then(() => dispatch(clearErrors()))
     .catch(err => {
-        dispatch(returnErrors(err.response.data, err.response.status, 'Error receiving university information'));
+        dispatch(returnErrors("University already exists", err.response.status, 'Error creating university'));
     });
     
+}
+
+// Create a new university
+export const getUniversities = () => (dispatch) => {
+    axios.post('/api/info/newUniversity')
+        .then(res => dispatch({
+            type: GET_UNIVERSITIES,
+            payload: res.data
+        }))
+        .catch(err => {
+            dispatch(returnErrors(err.response.data, err.response.status, 'Error receiving university information'));
+        });
+
 }
 
 // Loads comments

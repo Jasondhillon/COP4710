@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import { getRSOEvents } from '../store/actions/events';
 import { getComments } from '../store/actions/info';
 import PropTypes from 'prop-types';
+import CreateUniversity  from './CreateUniversity';
 
 class AppNavbar extends Component 
 {
@@ -38,14 +39,18 @@ class AppNavbar extends Component
 
     render()
     {
-        const { isAuthenticated } = this.props.auth;
+        const { isAuthenticated, user } = this.props.auth;
 
 
         const authLinks = (
             <Fragment>
-                <NavItem>
-                    <CreateRSO />
-                </NavItem>
+                {/* { user.auth_level === 2 ? */}
+                    <NavItem>
+                        <CreateUniversity />
+                    </NavItem>
+                    {/*  :
+                     <Fragment/>} */}
+                
                 <NavItem>
                     <RSOModal />
                 </NavItem>

@@ -12,14 +12,12 @@ export const joinRSO = (RSO) => (dispatch, getState) =>
 export const createRSO = (RSO) => (dispatch, getState) =>
 {
     axios.post('/api/rso/create', RSO, tokenConfig(getState))
-        .then(() => {
-            dispatch(clearErrors());
-        })
-        .catch( err => {
-            if(err !== null)
-                dispatch(returnErrors("RSO already exists", err.response.status, 'Error creating RSO'));
-                
-        })
+    .then(() => {
+        dispatch(clearErrors());
+    })
+    .catch( err => {
+        dispatch(returnErrors("RSO already exists", err.response.status, 'Error creating RSO'));   
+    });
 }
 
 export const tokenConfig = getState => {

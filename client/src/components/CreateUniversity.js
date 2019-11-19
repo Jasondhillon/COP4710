@@ -1,5 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Input, NavLink} from 'reactstrap';
+import { clearErrors } from '../store/actions/errorActions'; 
+import { createUniversity } from '../store/actions/info'; 
 import { connect } from 'react-redux';
 
 class CreateUniversity extends Component 
@@ -8,7 +10,8 @@ class CreateUniversity extends Component
     state = 
     {
         modal: false,
-        name: ''
+        name: '',
+        msg: null
     }
 
     toggle = () => 
@@ -24,31 +27,31 @@ class CreateUniversity extends Component
         
     }
 
+    componentDidUpdate(prevProps) {
+        const { error } = this.props;
+
+        if (error !== prevProps.error)
+            if (error.id === 'University already exists')
+                this.setState({ msg: error.msg });
+            else if (error.id === null) {
+                this.setState({ msg: null, modal: false });
+            }
+
+    }
+
     onSubmit = (e) => {
         e.preventDefault();
 
-        //const { id, university_id } = this.props.auth.user;
+        const { id, university_id } = this.props.auth.user;
 
-        // const event = {
-        //     name: this.state.name,
-        //     RSOs_admin_id: id,
-        //     RSOs_university_id: university_id
-        // }
-
-        // TODO: Create RSO function
-
-        // Close modal
-        this.toggle();
-
-        this.setState({
-            modal: false,
-            name: ''
-        });
+        const University = {
+            name: this.state.name,
+        }
     }
 
     render()
     {
-        return (
+        const authLinks = (
             <div>
                 <NavLink href="#"
                     color="light"
@@ -66,23 +69,32 @@ class CreateUniversity extends Component
                                     name="name"
                                     id="name"
                                     placeholder="Name"
-                                    onChange={this.onChange}/>
+                                    onChange={this.onChange} />
                                 <Button
                                     color="primary"
-                                    style={{marginTop: '2rem'}}
+                                    style={{ marginTop: '2rem' }}
                                     block
-                                >Create RSO</Button>
+                                >Create University</Button>
                             </FormGroup>
                         </Form>
                     </ModalBody>
                 </Modal>
             </div>
         );
+
+
+        return (
+            <div>
+                {this.props.auth.user.auth_level === 2 ?
+            authLinks : <Fragment/>}
+            </div>
+        );
     }
 }
 
 const mapStateToProps = state => ({
-    auth: state.auth
+    auth: state.auth,
+    error: state.error
 });
 
-export default connect(mapStateToProps, { })(CreateUniversity);
+export default connect(mapStateToProps, { createUniversity, clearErrors})(CreateUniversity);

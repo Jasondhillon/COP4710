@@ -28,6 +28,21 @@ router.get('/universities', (req, res) =>
     });
 });
 
+// @router Post api/info/
+// @desc   Create a new universities 
+// @access Private
+router.get('/newUniversity',auth, (req, res) => 
+{
+    let {name} = req;
+    let sql = 'INSERT INTO universities VALUES() = (?)';
+    db.query(sql, [name] ,(err, result) => {
+        if (err) {
+            return res.status(400).send(err);
+        }
+        res.json(result);
+    });
+});
+
 // @router GET api/info/
 // @desc   Get all comments 
 // @access Public
