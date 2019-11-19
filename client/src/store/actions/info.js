@@ -3,10 +3,14 @@ import { returnErrors, clearErrors  } from "./errorActions";
 import {GET_UNIVERSITIES, GET_COMMENTS, GET_RSOS, GET_RSOS_ADMIN, CLEAR_RSOS, CLEAR_RSOS_ADMIN } from './constants';
 
 // Create a new university
-export const createUniversity = (University) => (dispatch) => 
+export const createUniversity = (name) => (dispatch, getState) => 
 {
-    axios.post('/api/info/newUniversity')
-    .then(() => dispatch(clearErrors()))
+    const body = JSON.stringify({name});
+    axios.post('/api/info/newUniversity', body, tokenConfig(getState))
+    .then(() => {
+        dispatch(clearErrors());
+        dispatch(getUniversities());
+    })
     .catch(err => {
         dispatch(returnErrors("University already exists", err.response.status, 'Error creating university'));
     });
@@ -23,7 +27,6 @@ export const getUniversities = () => (dispatch) => {
         .catch(err => {
             dispatch(returnErrors(err.response.data, err.response.status, 'Error receiving university information'));
         });
-
 }
 
 // Loads comments

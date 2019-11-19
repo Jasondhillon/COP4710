@@ -23,7 +23,7 @@ class EventModal extends Component
         email: '',
         status: 'rso',
         university: '',
-        rso: 0,
+        rso: 533,
         admin_id: '',
         approved: '',
         msg: null
@@ -59,47 +59,27 @@ class EventModal extends Component
         });
     }
 
-    // componentDidUpdate(prevProps) {
-    //     const { error } = this.props;
-    //     if (error !== prevProps.error)
-    //         if (error.id === 'Timing Conflict')
-    //             this.setState({ msg: error.msg.msg });
-    //         else if (error.id === null)
-    //             this.setState({ msg: null, modal: false });
-    // }
 
     onSubmit = (e) => {
         e.preventDefault();
         this.setState({msg:null});
         const { id, university_id } = this.props.auth.user;
 
-        console.log(university_id + ", " + this.state.location + ", " + this.state.date, this.state.time + "" + this.state.time_period);
 
         this.props.checkTime(university_id, this.state.location, this.state.date, this.state.time + "" + this.state.time_period);
 
-        // this.props.checkTime(2, "My house","9/25/18", "6:00pm");
-
-        // setTimeout( () => {
-        //     console.log(this.props.events.timeCheck);
-        //  }, 100);
-
         setTimeout( () => {
-            console.log(this.props.events.timeCheck);
 
             if (this.props.events.timeCheck === 0)
             {
-                let app = 0;
+                let app = 1;
                 let status = this.state.status;
-    
-                if (this.state.rso !== "42")
+                if (this.state.rso === 553)
                 {
-                    app = 1;
+                    app = 0;
                     status = "Public";
                 }
     
-                // if (Number.isInteger(this.state.time))
-                //     this.setState({msg: 'Time is in the wrong format (H)'})
-                
                 const event = {
                     name: this.state.name,
                     eventName: this.state.eventName,
@@ -110,7 +90,7 @@ class EventModal extends Component
                     location: this.state.location,
                     phone: this.state.phone,
                     email: this.state.email,
-                    status: this.state.status,
+                    status: status,
                     Events_university_id: university_id,
                     Events_RSO_id: this.state.rso,
                     Events_admin_id: id,

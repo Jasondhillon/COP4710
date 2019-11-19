@@ -11,7 +11,7 @@ const initalState =
     }],
 
     rsosAdmin: [{
-        idRSO: 0,
+        idRSO: 553,
         name: "Public Event (Pending approval of SuperAdmin)",
         approved: 0
     }],
@@ -51,7 +51,7 @@ export default function(state = initalState, action)
         case GET_RSOS:
             return {
                 ...state,
-                rsos: action.payload.filter(rso => rso.idRSO !== 42).concat(state.rsos)
+                rsos: action.payload.filter(rso => rso.idRSO !== 553).concat(state.rsos)
             }
         case CLEAR_RSOS:
             return {
@@ -64,12 +64,16 @@ export default function(state = initalState, action)
         case GET_RSOS_ADMIN:
             return {
                 ...state,
-                rsosAdmin: action.payload.concat(state.rsosAdmin)
+                rsosAdmin: action.payload.filter(rso => rso.idRSO !== 553).concat(state.rsosAdmin)
             }
         case CLEAR_RSOS_ADMIN:
             return {
                 ...state,
-                rsosAdmin: []
+                rsosAdmin: [{
+                    idRSO: 553,
+                    name: "Public Event (Pending approval of SuperAdmin)",
+                    approved: 0
+                }]
             }
         default:
             return state;

@@ -39,18 +39,14 @@ class AppNavbar extends Component
 
     render()
     {
-        const { isAuthenticated, user } = this.props.auth;
+        const { isAuthenticated } = this.props.auth;
 
 
         const authLinks = (
             <Fragment>
-                {/* { user.auth_level === 2 ? */}
-                    <NavItem>
-                        <CreateUniversity />
-                    </NavItem>
-                    {/*  :
-                     <Fragment/>} */}
-                
+                <NavItem>
+                    <CreateUniversity />
+                </NavItem>
                 <NavItem>
                     <RSOModal />
                 </NavItem>

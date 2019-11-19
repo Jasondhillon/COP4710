@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { returnErrors, clearErrors  } from "./errorActions";
+import { returnErrors  } from "./errorActions";
 import { GET_PUBLIC_EVENTS, GET_PRIVATE_EVENTS, GET_RSO_EVENTS, CREATE_EVENT, CLEAR_EVENTS, GET_UNAPPROVED_EVENTS, APPROVE_EVENT, DENY_EVENT, ADD_UNAPPROVED_EVENT, CHECK_EVENT_TIME} from './constants';
 
 
@@ -90,8 +90,8 @@ export const getRSOEvents = ( idUser, university_id ) => (dispatch, getState) =>
 
 export const createEvent = ({ name, eventName, category, description, time, date, location, phone, email, status, Events_university_id, Events_RSO_id, Events_admin_id, approved }) => (dispatch, getState) =>
 {
-
-    if (Events_RSO_id === '42')
+    
+    if (Events_RSO_id === 553)
     {
         let body = JSON.stringify({name, category, description, time, date, location, phone, email, status, Events_university_id, Events_RSO_id, Events_admin_id, approved});
 
@@ -100,7 +100,10 @@ export const createEvent = ({ name, eventName, category, description, time, date
 
             const idEvent = res.data.insertId;
             const rating = 0;
-            const event = ({ idEvent, name, eventName, category, description, time, date, location, phone, email, status, rating});
+
+            const event = ({ idEvent, name, eventName, category, description, time, date, location, phone, email, status, rating, approved});
+
+            console.log("create event action-> public event detected->" + event);
 
             dispatch({
                 type: ADD_UNAPPROVED_EVENT,
@@ -115,6 +118,7 @@ export const createEvent = ({ name, eventName, category, description, time, date
 
     else
     {
+        console.log("non public meme detected");
         let body = JSON.stringify({name, category, description, time, date, location, phone, email, status, Events_university_id, Events_RSO_id, Events_admin_id, approved});
 
         axios.post('/api/events/create', body, tokenConfig(getState))

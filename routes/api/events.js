@@ -90,6 +90,8 @@ router.post('/create', (req,res) => {
 
     const {name, category, description, time, date, location, phone, email, status, Events_university_id, Events_RSO_id, Events_admin_id, approved} = req.body;
 
+    // console.log("ROUTE:" + name, category, description, time, date, location, phone, email, status, Events_university_id, Events_RSO_id, Events_admin_id);
+
     let sql = 'INSERT INTO events (name, category, description, time, date, location, phone, email, status, Events_university_id, Events_RSO_id, Events_admin_id, approved) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
     db.query(sql, [name, category, description, time, date, location, phone, email, status, Events_university_id, Events_RSO_id, Events_admin_id, approved], (err, result) => {
         if (err)
@@ -108,12 +110,7 @@ router.post('/checkTime', (req,res) => {
 
     let sql = 'SELECT COUNT(*) as count FROM events WHERE (Events_university_id = ? AND location = ? AND date = ? AND time = ?)';
     db.query(sql, [university, location, date, time], (err, result) => {
-        // if (result[0].count >= 1)
-        // {
-        //     return res.status(400).send(err);
-        // }
-        // else
-            res.json(result[0].count);
+        res.json(result[0].count);
 
     });
 });

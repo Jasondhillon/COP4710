@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Input, NavLink} from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Input, NavLink, Alert} from 'reactstrap';
 import { clearErrors } from '../store/actions/errorActions'; 
 import { createUniversity } from '../store/actions/info'; 
 import { connect } from 'react-redux';
@@ -31,23 +31,27 @@ class CreateUniversity extends Component
         const { error } = this.props;
 
         if (error !== prevProps.error)
-            if (error.id === 'University already exists')
+            if (error.id === 'Error creating university')
                 this.setState({ msg: error.msg });
             else if (error.id === null) {
-                this.setState({ msg: null, modal: false });
+                this.setState({ msg: null, modal:false});
             }
-
     }
 
     onSubmit = (e) => {
         e.preventDefault();
 
-        const { id, university_id } = this.props.auth.user;
-
-        const University = {
-            name: this.state.name,
+        if (this.state.name !== '')
+        {
+            this.props.createUniversity(this.state.name);
+        
+            // this.toggle();
+            // this.setState({name:''});
         }
+        else
+            this.setState({msg:'Please enter the name of the university'});
     }
+
 
     render()
     {
@@ -62,6 +66,7 @@ class CreateUniversity extends Component
                     toggle={this.toggle}>
                     <ModalHeader toggle={this.toggle}>Create New University</ModalHeader>
                     <ModalBody>
+                    {this.state.msg ? (<Alert color="danger">{this.state.msg}</Alert>) : null}
                         <Form onSubmit={this.onSubmit}>
                             <FormGroup>
                                 <Input
@@ -98,9 +103,3 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps, { createUniversity, clearErrors})(CreateUniversity);
-
-/*
-    // "host"  : "us-cdbr-iron-east-02.cleardb.net",
-    // "user" : "b62fbd4d6da0de",
-    // "password" : "82cebe5c",
-    // "database" :"heroku_8a8e9bdedc4afce" */
