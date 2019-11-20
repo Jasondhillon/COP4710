@@ -1,0 +1,9 @@
+To run this application, you will need node.js and a server running MySQL with standard settings.
+
+MySQL server requires a login of "root" and "pass", with a database schema name of "heroku_8a8e9bdedc4afce"
+	- Use the two scripts provided to setup the schema and (hopefully) import the data
+	- This can be modified in the source/config/default.json file
+
+Go into the source folder and run "npm install" which will install all of the dependencies needed.
+
+Once all dependencies are installed, run "npm run dev" which will start both the front and back end.
