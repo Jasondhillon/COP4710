@@ -83,7 +83,7 @@ export const getRSOEvents = ( idUser, university_id ) => (dispatch, getState) =>
             payload: res.data
         }))
         .catch(err => {
-            dispatch(returnErrors(err.response.data, err.response.status, ' Error retrieiving Public/Private/RSO events'));
+            dispatch(returnErrors(err.response.data, err.response.status, ' Error retrieving Public/Private/RSO events'));
         });
 
 };
@@ -103,7 +103,6 @@ export const createEvent = ({ name, eventName, category, description, time, date
 
             const event = ({ idEvent, name, eventName, category, description, time, date, location, phone, email, status, rating, approved});
 
-            console.log("create event action-> public event detected->" + event);
 
             dispatch({
                 type: ADD_UNAPPROVED_EVENT,
@@ -118,7 +117,6 @@ export const createEvent = ({ name, eventName, category, description, time, date
 
     else
     {
-        console.log("non public meme detected");
         let body = JSON.stringify({name, category, description, time, date, location, phone, email, status, Events_university_id, Events_RSO_id, Events_admin_id, approved});
 
         axios.post('/api/events/create', body, tokenConfig(getState))

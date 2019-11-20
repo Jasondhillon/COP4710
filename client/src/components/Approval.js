@@ -37,42 +37,45 @@ class Approval extends Component {
 
     render() {
         return(
-            <Accordion style={{display: 'flex', justifyContent: 'center', marginTop:'4rem'}}>
-                <TransitionGroup className="events-list" style={{opacity: .85}}>
-                {this.props.unApprovedEvents.map(({ idEvent, eventName, category, description,
-                    name, time, date, location, phone, email }) => (
-                    <CSSTransition key={idEvent} timeout={1000} classNames="fade">
-                        <Card>
-                            <Accordion.Toggle style={{paddingLeft:'4rem' , paddingRight:'4rem'}} as={Card.Header} eventKey={idEvent}>
-                                {name}{" | "}{eventName}{" | "}{time}{" | "}{date}
-                            </Accordion.Toggle>
-                                
-                            <Accordion.Collapse eventKey={idEvent}>
-                                <Card.Body>
-                                    <Card.Title>{eventName}</Card.Title>
-                                    <Card.Subtitle>{description}</Card.Subtitle>
-                                    <Card.Subtitle>{category}</Card.Subtitle>
-                                    <Card.Subtitle>{location}</Card.Subtitle>
-                                    <Card.Subtitle>{phone}</Card.Subtitle>
-                                    <Card.Subtitle>{email}</Card.Subtitle>
-                                    <Button
-                                        color="primary"
-                                        style={{ marginBottom: '2rem' }}
-                                        onClick={this.onClickApprove.bind(this, idEvent)}
-                                    >Approve Event</Button>
-                                    <Button
-                                        color="danger"
-                                        style={{ marginBottom: '2rem' }}
-                                        onClick={this.onClickDeny.bind(this, idEvent)}
-                                    >Deny Event</Button>
+            <div>
+                <Accordion style={{display: 'flex', justifyContent: 'center', marginTop: '4rem'}}>
+                    <TransitionGroup className="events-list" style={{opacity: .85}}>
+                    {this.props.unApprovedEvents.map(({ idEvent, eventName, category, description,
+                        name, time, date, location, phone, email }) => (
+                        <CSSTransition key={idEvent} timeout={1000} classNames="fade">
+                            <Card>
+                                <Accordion.Toggle style={{paddingLeft:'4rem' , paddingRight:'4rem'}} as={Card.Header} eventKey={idEvent}>
+                                    {"(Requires Approval | "}
+                                    {name}{" | "}{eventName}{" | "}{time}{" | "}{date}
+                                </Accordion.Toggle>
                                     
-                                </Card.Body>
-                            </Accordion.Collapse>
-                        </Card>
-                    </CSSTransition>
-                ))}
-                </TransitionGroup>
-            </Accordion>
+                                <Accordion.Collapse eventKey={idEvent}>
+                                    <Card.Body>
+                                        <Card.Title>{eventName}</Card.Title>
+                                        <Card.Subtitle>{description}</Card.Subtitle>
+                                        <Card.Subtitle>{category}</Card.Subtitle>
+                                        <Card.Subtitle>{location}</Card.Subtitle>
+                                        <Card.Subtitle>{phone}</Card.Subtitle>
+                                        <Card.Subtitle>{email}</Card.Subtitle>
+                                        <Button
+                                            color="primary"
+                                            style={{ marginBottom: '2rem' }}
+                                            onClick={this.onClickApprove.bind(this, idEvent)}
+                                        >Approve Event</Button>
+                                        <Button
+                                            color="danger"
+                                            style={{ marginBottom: '2rem' }}
+                                            onClick={this.onClickDeny.bind(this, idEvent)}
+                                        >Deny Event</Button>
+                                        
+                                    </Card.Body>
+                                </Accordion.Collapse>
+                            </Card>
+                        </CSSTransition>
+                    ))}
+                    </TransitionGroup>
+                </Accordion>
+            </div>
         );
     }
 }

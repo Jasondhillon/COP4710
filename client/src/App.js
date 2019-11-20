@@ -12,7 +12,7 @@ class App extends Component {
     return (
       <Provider store={ store }>
         <div className="App">
-        <video className="videoparallax" loop muted >
+        <video className="videoparallax" autoPlay loop muted >
           <source src={require('./source.webm')} type="video/webm"/>
         </video>
           <AppNavbar/>

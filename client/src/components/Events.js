@@ -23,8 +23,10 @@ class Events extends Component
     //, idEvent, rating, numRatings, scoreRatings 
     changeRating = (newRating, name) => {
         let value = (name[3] + newRating)/(name[2] + 1);
+
         this.props.updateRating(name[0], value, name[2]+1, name[3] + newRating );
-        this.props.getRSOEvents(this.props.auth.user.idUser, this.props.auth.user.university_id);
+
+        this.props.getRSOEvents(this.props.auth.user.id, this.props.auth.user.university_id);
     }
 
     renderApproval () {

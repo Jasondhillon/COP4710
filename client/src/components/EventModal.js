@@ -151,6 +151,7 @@ class EventModal extends Component
                                 <Input type="select" name="rso" id="rso" onChange={this.onSelect}>
                                     {this.props.rsos.map(({ name, idRSO, approved }) => (
                                     <option 
+                                        disabled = {(approved === 0 ? (idRSO !== 553 ? true: false) : false)}
                                         key ={name} 
                                         value = {[name, idRSO]}>
                                     {name} {approved ? "" : " (Unapproved)"}
