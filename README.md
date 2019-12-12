@@ -1,10 +1,5 @@
-# React/Redux Express Starter Pack
-
-> Create full stack apps with React/Redux and Express. Run your client and server with a single command
-
-### Version Without Redux
-This version includes Redux
-[Click Here For the Version WITHOUT Redux](https://github.com/bradtraversy/react_express_starter) 
+# COP 4710 Project
+This is a project for my Database Management Class where I make a full stack website for colleges to display student based organizations, allowing students to view events, create clubs, and join clubs. The database has three tiers of access, where one is a student that can see private events that the school provides, another is an admin which can create events for their club, and the last is the superAdmin which can create new universities and approve public/school events which students suggest, or deny the event.
 
 ## Quick Start
 
